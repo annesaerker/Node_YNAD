@@ -454,7 +454,8 @@ p, .p {
       flex-direction: column; }
     .pieces-table table p {
       font-size: 13px;
-      line-height: 26px; }
+      line-height: 26px;
+      width: 100px; }
     .pieces-table table th, .pieces-table table td {
       text-align: left;
       padding: 8px;
@@ -473,13 +474,18 @@ p, .p {
     padding: 4px;
     width: 1px;
     height: 1px;
-    margin: 10px 0 10px 20px; }
+    margin: 10px 0 10px 0; }
   .pieces-status .approved {
     background: #73AD21; }
   .pieces-status .pending {
     background: #e0d612; }
   .pieces-status .denied {
     background: #ad2121; }
+
+.piece-thumbnail img {
+  height: 50px;
+  width: 50px;
+  object-fit: cover; }
 
 /*====================================================*/
 /*====================================================*/
