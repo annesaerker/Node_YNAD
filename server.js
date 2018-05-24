@@ -71,7 +71,7 @@ global.db = mysql.createConnection({
     host: "localhost",
     user: "admin",
     password: "password",
-    database: "dbynad",
+    database: "dbynad-node",
     port: 8889
 });
 /* *** *** CONNET TO OUR DATABASE *** *** */
