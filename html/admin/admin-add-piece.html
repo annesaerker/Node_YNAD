@@ -1,0 +1,52 @@
+<section id="addPiece">
+    <div id="formAddPiece" class="divWhiteBox">
+        <div class="formAddPiece__header">
+            <h1>Add Piece</h1>
+            <p>When You submit a piece, we will go over it and give you feedback as soon as possible.</p>
+        </div>
+        <form id="addPieceForm" class="addPieceForm" method="POST" action="/add-piece">  
+            <input class="h5" placeholder="Title" name="title">
+            <input class="h5" placeholder="Material" name="material">  
+            <textarea cols="30" rows="10" class="h5" placeholder="Description" name="description"></textarea>
+            <input class="h5" placeholder="Size" name="size"> 
+            <input class="h5" placeholder="Price" name="price"> 
+            <select name="dateCreated" id="dateCreated"></select>
+            
+            <input type="file" id="imgInp" class="custom-file-input" name="piece_image">
+            <img class="user_image_upload" id="user-image-upload" src="images/icon/imagePlaceholder.jpg" alt="your image"/>
+ 
+            <select name="pieceMedia" id="pieceMedia"></select>
+
+            <button type="submit" id="btnSubmitPiece" class="btnDark">Admit Piece</button>
+        </form>
+    </div>
+</section>
+    <script>
+        $.get('/get-piece-date-created', function(data){
+            $.each(data, function( key, value ) {
+                // console.log('yearID: ' + value.idyear + ' | year: ' +value.year);
+                $('#dateCreated').append($("<option></option>")
+                    .attr("value", value.idyear)
+                    .text(value.year)); 
+            });
+        })
+        $.get('/get-piece-media', function(data){
+            $.each(data, function( key, value ) {
+                // console.log('idmedia: ' + value.idmedia + ' | media: ' +value.media);
+                $('#pieceMedia').append($("<option></option>")
+                    .attr("value", value.idmedia)
+                    .text(value.media)); 
+            });
+        })
+
+        // $('#btnSubmitPiece').click(function() {
+        //     var formPieceSerialized = $('#addPieceForm').serialize();
+        //     console.log('html info: ', formPieceSerialized);
+        //     $.post('/submit-piece', formPieceSerialized, function(data){
+        //         console.log("data: ",data);
+        //         if(data.success == 'ok') {
+        //             console.log("her");
+        //         }
+        //     });
+        // });
+    </script>
