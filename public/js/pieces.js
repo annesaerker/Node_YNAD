@@ -43,7 +43,7 @@ jPieces.savePiece = function(req, res) {
     var price = req.body.price;
     var status_idstatus = '1';
     var year_idyear = req.body.dateCreated;
-    var piece_image = req.body.price;
+    var piece_image = req.body.piece_image;
     var users_idusers = '1';
     var media_idmedia = req.body.pieceMedia;
 

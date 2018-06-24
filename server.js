@@ -3,8 +3,7 @@ const mysql = require('mysql');
 const express = require('express');
 global.app = express();
 global.gFs = require('fs');
-//WHAT IS FORMIDABLE FOR?
-var formidable = require('express-formidable');
+
 //WHAT IS BODYPARSER FOR?
 var bodyParser = require('body-parser');
 //WHAT IS cookieParser FOR?
@@ -23,7 +22,6 @@ global.bcrypt = require('bcrypt');
 //nodemailer IS USED TO VERIFY THE USER WHEN HE REGISTERS.
 global.nodemailer = require('nodemailer');
 
-// app.use(formidable());
 app.use(bodyParser());
 app.use(cookieParser());
 
@@ -48,6 +46,12 @@ const sCreativesHTML = gFs.readFileSync( __dirname + '/html/pages/creatives.html
 const sPiecesHTML = gFs.readFileSync( __dirname + '/html/pages/pieces.html', 'utf8');
 const sSmsHTML = gFs.readFileSync( __dirname + '/html/pages/sms.html', 'utf8');
 const sChatHTML = gFs.readFileSync( __dirname + '/html/admin/admin-chat.html', 'utf8');
+
+// Pages that change
+var sFrontBackgroundHTML = gFs.readFileSync( __dirname + '/html/background-front.html', 'utf8');
+var sMyProfileHTML = gFs.readFileSync( __dirname + '/html/admin/admin-my-profile.html', 'utf8');
+var sEditProfileHTML = gFs.readFileSync( __dirname + '/html/admin/admin-edit-profile.html', 'utf8');
+var sMyPiecesHTML = gFs.readFileSync( __dirname + '/html/admin/admin-my-pieces.html', 'utf8');
 
 /* *** JS FILES *** */
 const ChatFile = require(__dirname + '/public/js/chat.js');
@@ -98,9 +102,9 @@ app.get('/get-user-location', (req, res) => {
     UserFile.getUserLocation(req, res);
 });
 app.get('/sign-up', (req, res) => {
-    var sFrontBackgroundHTML = gFs.readFileSync( __dirname + '/html/background-front.html', 'utf8');
-    sFrontBackgroundHTML = sFrontBackgroundHTML.replace('{{backgroundSize}}', 'backgroun-front-long');
-    res.send(sHeaderHTML + sFrontBackgroundHTML + sSignUpHTML + sFooterHTML);
+    let displayFrontBackground = sFrontBackgroundHTML; 
+    displayFrontBackground = displayFrontBackground.replace('{{backgroundSize}}', 'backgroun-front-long');
+    res.send(sHeaderHTML + displayFrontBackground + sSignUpHTML + sFooterHTML);
 });
 app.post('/sign-up', (req, res) => {
     UserFile.saveUser(req, res);
@@ -115,9 +119,9 @@ app.post('/verification',(req, res) => {
 
 /* *** *** LogIn *** *** */
 app.get('/log-in', (req, res) => {
-    var sFrontBackgroundHTML = gFs.readFileSync( __dirname + '/html/background-front.html', 'utf8');
-    sFrontBackgroundHTML = sFrontBackgroundHTML.replace('{{backgroundSize}}', 'backgroun-front');
-    res.send(sHeaderHTML + sFrontBackgroundHTML + sLogInHTML + sFooterHTML);
+    let displayFrontBackground = sFrontBackgroundHTML; 
+    displayFrontBackground = displayFrontBackground.replace('{{backgroundSize}}', 'backgroun-front');
+    res.send(sHeaderHTML + displayFrontBackground + sLogInHTML + sFooterHTML);
 });
 app.post('/log-in', passport.authenticate('local',{
     successRedirect:'/admin-my-profile', failureRedirect:'/log-in'}));
@@ -166,11 +170,13 @@ app.get('/pieces', (req, res) => {
 
 /* *** *** SMS *** *** */
 app.get('/sms', (req, res) => {
+    let displayFrontBackground = sFrontBackgroundHTML; 
+    displayFrontBackground = displayFrontBackground.replace('{{backgroundSize}}', 'backgroun-front');
     if(req.isAuthenticated()){
-        res.send(sAdminHeaderHTML + sFrontBackgroundHTML + sSmsHTML + sFooterHTML);
+        res.send(sAdminHeaderHTML + displayFrontBackground + sSmsHTML + sFooterHTML);
     }
     else{
-        res.send(sHeaderHTML + sFrontBackgroundHTML + sSmsHTML + sFooterHTML);
+        res.send(sHeaderHTML + displayFrontBackground + sSmsHTML + sFooterHTML);
     }
 });
 /* Send SMS To User */
@@ -189,44 +195,44 @@ app.post('/sms', (req, res) => {
 /* *** ADMIN *** ADMIN *** ADMIN *** ADMIN *** ADMIN *** ADMIN *** ADMIN *** ADMIN *** ADMIN *** */
 /* *** *** Get My Profile *** *** */
 app.get('/admin-my-profile', authenticationMiddleware(), (req, res) => { 
-    var sMyProfileHTML = gFs.readFileSync( __dirname + '/html/admin/admin-my-profile.html', 'utf8');
+    var displayMyProfile = sMyProfileHTML;
     UserFile.getLoggedInUserInfo(req, res, function (err, datafromDB) {
         if (err) {
           someerrorjson = { some: 'error'}
           return res.send({someerrorjson})
         }
-        sMyProfileHTML = sMyProfileHTML.replace('{{userID}}', datafromDB[0].idusers);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userFirstName}}', datafromDB[0].firstname);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userLastName}}', datafromDB[0].lastname);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userProfession}}', datafromDB[0].profession);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userDescription}}', datafromDB[0].description);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userProfileImage}}', datafromDB[0].profile_image);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userFacebook}}', datafromDB[0].facebook_url);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userInstagram}}', datafromDB[0].instagram_url);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userTwitter}}', datafromDB[0].twitter_url);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userMail}}', datafromDB[0].email);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userMail2}}', datafromDB[0].email);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userPhone}}', datafromDB[0].phone_number);
-        sMyProfileHTML = sMyProfileHTML.replace('{{userPhone2}}', datafromDB[0].phone_number);
+        displayMyProfile = displayMyProfile.replace('{{userID}}', datafromDB[0].idusers);
+        displayMyProfile = displayMyProfile.replace('{{userFirstName}}', datafromDB[0].firstname);
+        displayMyProfile = displayMyProfile.replace('{{userLastName}}', datafromDB[0].lastname);
+        displayMyProfile = displayMyProfile.replace('{{userProfession}}', datafromDB[0].profession);
+        displayMyProfile = displayMyProfile.replace('{{userDescription}}', datafromDB[0].description);
+        displayMyProfile = displayMyProfile.replace('{{userProfileImage}}', datafromDB[0].profile_image);
+        displayMyProfile = displayMyProfile.replace('{{userFacebook}}', datafromDB[0].facebook_url);
+        displayMyProfile = displayMyProfile.replace('{{userInstagram}}', datafromDB[0].instagram_url);
+        displayMyProfile = displayMyProfile.replace('{{userTwitter}}', datafromDB[0].twitter_url);
+        displayMyProfile = displayMyProfile.replace('{{userMail}}', datafromDB[0].email);
+        displayMyProfile = displayMyProfile.replace('{{userMail2}}', datafromDB[0].email);
+        displayMyProfile = displayMyProfile.replace('{{userPhone}}', datafromDB[0].phone_number);
+        displayMyProfile = displayMyProfile.replace('{{userPhone2}}', datafromDB[0].phone_number);
     
-        return res.send(sAdminHeaderHTML + sMyProfileHTML + sFooterHTML);
+        return res.send(sAdminHeaderHTML + displayMyProfile + sFooterHTML);
     });
 });
 
 /* *** *** Get Profile Info in Form: *** *** */
 app.get('/admin-edit-profile', authenticationMiddleware(), (req, res) => {
-    var sEditProfileHTML = gFs.readFileSync( __dirname + '/html/admin/admin-edit-profile.html', 'utf8');
+    var displayEditProfile = sEditProfileHTML;
     UserFile.getLoggedInUserForInput(req, res, function (err, datafromDB) {
         if (err) {
           someerrorjson = { some: 'error'}
           return res.send({someerrorjson})
         }
-        sEditProfileHTML = sEditProfileHTML.replace('{{getUserFirstName}}', datafromDB[0].firstname);
-        sEditProfileHTML = sEditProfileHTML.replace('{{getUserLastrName}}', datafromDB[0].lastname);
-        sEditProfileHTML = sEditProfileHTML.replace('{{getUseremail}}', datafromDB[0].email);
-        sEditProfileHTML = sEditProfileHTML.replace('{{getUsernumber}}', datafromDB[0].phone_number);
+        displayEditProfile = displayEditProfile.replace('{{getUserFirstName}}', datafromDB[0].firstname);
+        displayEditProfile = displayEditProfile.replace('{{getUserLastrName}}', datafromDB[0].lastname);
+        displayEditProfile = displayEditProfile.replace('{{getUseremail}}', datafromDB[0].email);
+        displayEditProfile = displayEditProfile.replace('{{getUsernumber}}', datafromDB[0].phone_number);
         
-        res.send(sAdminHeaderHTML + sEditProfileHTML + sFooterHTML);
+        res.send(sAdminHeaderHTML + displayEditProfile + sFooterHTML);
     }); 
 });
 
@@ -241,7 +247,7 @@ app.post('/admin-edit-profile',(req, res) => {
 /* *** *** My Pieces *** *** */
 app.get('/admin-my-pieces', authenticationMiddleware(), (req, res) => {
     // PiecesFile.getPieces(req, res);
-    var sMyPiecesHTML = gFs.readFileSync( __dirname + '/html/admin/admin-my-pieces.html', 'utf8');
+    var displayMyPieces = sMyPiecesHTML; 
     var stmt = 'SELECT * FROM pieces';
     try{
         db.query(stmt, (err, ajData)=>{
@@ -263,7 +269,7 @@ app.get('/admin-my-pieces', authenticationMiddleware(), (req, res) => {
                 pieceList += '<tr>\
                                     <td>\
                                         <div class="piece-thumbnail">\
-                                            <img src="/images/pieces/abstract.png">\
+                                            <img src="'+ajData[i].piece_image+'">\
                                         </div>\
                                     </td>\
                                     <td>\
@@ -292,10 +298,10 @@ app.get('/admin-my-pieces', authenticationMiddleware(), (req, res) => {
                                     </td>\
                                 </tr>';
             }   
-            sMyPiecesHTML = sMyPiecesHTML.replace('{{listOfPieces}}', pieceList);
+            displayMyPieces = displayMyPieces.replace('{{listOfPieces}}', pieceList);
                 // console.log(pieceList);
                 // res.json(ajData);
-            res.send(sAdminHeaderHTML + sMyPiecesHTML + sFooterHTML);
+            res.send(sAdminHeaderHTML + displayMyPieces + sFooterHTML);
         });
         }catch(err){
             return res.send('We had some problem with adding a piece');

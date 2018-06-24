@@ -3,14 +3,14 @@ The higher the cost factor, the more hashing rounds are done. Increasing te cost
 The more time is necessary, the more difficult is brute-forcing. *** */
 const saltRounds = 10;
 
-var options = {
+const options = {
     host: "localhost",
     user: "admin",
     password: "password",
-    database: "dbynad",
+    database: "dbynad-node",
     port: 8889
 };
-var sessionStore = new MySQLStore(options);
+const sessionStore = new MySQLStore(options);
 
 app.use(session({
     secret: secretTokenGenerator(),
