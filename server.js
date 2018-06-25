@@ -1,4 +1,3 @@
-//SPURJA Á ÞETTA AÐ VERA VAR EÐA CONST!?
 const mysql = require('mysql');
 const express = require('express');
 global.app = express();
