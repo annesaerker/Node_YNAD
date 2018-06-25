@@ -9,7 +9,7 @@ smsData.sendSmsData = function(req, res) {
     var apiToken = '$2y$10$H.KvGdTTPrMYwuThvdkSP.v3rAcGU5sCuBui1eHaCdLIZV2Cmi.Sm';
     // console.log(sMobile)
 
-    request.post({url:'http://smses.io/api-send-sms', 
+    request.post({'url':'http://smses.io/api-send-sms', 
         form: { 
             apiToken: apiToken, 
             mobile: sMobile, 
